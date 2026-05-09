@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD LIAAA 🤍</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Caveat:wght@700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --soft-pink: #fff0f3; --accent-pink: #ff8fac; }
+        body { font-family: 'Plus+Jakarta+Sans', sans-serif; background-color: var(--soft-pink); overflow-x: hidden; }
+        .font-handwritten { font-family: 'Caveat', cursive; }
+        .font-romance { font-family: 'Dancing+Script', cursive; }
+
+        /* Background Animasi Bulatan Halus */
+        .blob { position: absolute; width: 300px; height: 300px; background: linear-gradient(180deg, rgba(255,182,193,0.4) 0%, rgba(255,105,180,0.2) 100%); filter: blur(50px); border-radius: 50%; z-index: -1; animation: move 20s infinite alternate; }
+        @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(20%, 20%); } }
+
+        /* Efek Kartu Kaca Modern */
+        .glass { background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 2.5rem; }
+        
+        /* Efek Polaroid */
+        .polaroid { background: white; padding: 12px 12px 35px 12px; box-shadow: 0 15px 35px rgba(255,143,172,0.2); border-radius: 4px; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* Tombol Utama */
+        .btn-primary { background: linear-gradient(135deg, #ff8fac 0%, #ff5c8d 100%); box-shadow: 0 10px 20px rgba(255, 92, 141, 0.3); }
+        
+        .floating { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    </style>
+</head>
+<body x-data="app()">
+
+    <!-- Ornamen Background -->
+    <div class="fixed inset-0 overflow-hidden -z-10">
+        <div class="blob top-[-10%] left-[-10%]"></div>
+        <div class="blob bottom-[-10%] right-[-10%]"></div>
+        <div class="blob top-[40%] right-[-5%] w-[200px] h-[200px]" style="animation-duration: 15s"></div>
+    </div>
+
+    <!-- Kontrol Suara -->
+    <div class="fixed top-5 right-5 z-50 flex gap-2">
+        <button @click="toggleAudio()" class="w-12 h-12 glass flex items-center justify-center text-xl shadow-lg border border-pink-100">
+            <span x-text="audioPlaying ? '🔊' : '🔈'"></span>
+        </button>
+        <!-- Audio Lokal -->
+        <audio id="bgMusic" loop><source src="sound/music.mp3" type="audio/mpeg"></audio>
+        <audio id="errorSound"><source src="sound/click-error.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <!-- 1. PEMBUKA: AMPLOP -->
+    <section x-show="step === 1" x-transition.opacity.duration.800ms class="fixed inset-0 z-40 flex flex-col items-center justify-center p-6 bg-[#fff0f3]">
+        <div class="relative cursor-pointer floating" @click="openEnvelope()">
+            <div class="w-56 h-40 bg-pink-300 rounded-xl shadow-2xl relative flex items-center justify-center">
+                <div class="absolute inset-0 border-t-[80px] border-t-pink-200 border-x-[112px] border-x-transparent z-10"></div>
+                <div class="z-20 text-5xl">💌</div>
+            </div>
+        </div>
+        <p class="mt-12 font-handwritten text-2xl text-pink-500 animate-pulse text-center px-4">klik buat buka, Lia...</p>
+    </section>
+
+    <!-- KONTEN UTAMA -->
+    <main class="min-h-screen max-w-md mx-auto relative px-6 py-12 flex flex-col items-center justify-center" x-show="step > 1">
+        
+        <!-- 2. HBD PART 1 -->
+        <div x-show="step === 2" x-transition.opacity.duration.1000ms class="text-center">
+            <div class="text-7xl mb-8 floating">🎂</div>
+            <h1 class="text-3xl font-extrabold text-pink-600 mb-6 uppercase tracking-tighter leading-none">Happy Birthday Liaaa 🎂</h1>
+            <div class="glass p-8 mb-10 text-gray-700 leading-relaxed space-y-4 shadow-sm">
+                <p class="font-bold text-pink-500">cewe yang ternyata bisa bikin aku nyaman secepat ini</p>
+                <p>hari ini hari kamu, jadi pertama-tama aku cuma mau bilang makasih yaa…</p>
+                <p>makasih karena tanpa sadar kamu udah bikin beberapa minggu terakhir jadi jauh lebih seru, lebih rame, dan lebih banyak hal yang bisa aku senyumin sendiri 😭</p>
+            </div>
+            <button @click="nextStep()" class="btn-primary text-white px-12 py-4 rounded-full font-bold">Lanjut</button>
+        </div>
+
+        <!-- 3. HBD PART 2 (PERASAAN) -->
+        <div x-show="step === 3" x-transition.opacity.duration.1000ms class="text-center">
+            <div class="glass p-8 mb-10 text-gray-700 leading-relaxed space-y-6 shadow-sm">
+                <p>jujur aku seneng banget bisa kenal kamu. dari yang awalnya cuma orang random di si kuning itu, terus jadi temen ngobrol 5 jam tanpa awkward, terus jadi orang yang sekarang selalu aku tunggu notifnya 😌</p>
+                <p class="text-pink-500 font-bold italic text-lg">dan karena ini hari spesial kamu, aku juga mau doain banyak hal baik buat kamu 🤍</p>
+            </div>
+            <button @click="nextStep()" class="btn-primary text-white px-12 py-4 rounded-full font-bold">Amin...</button>
+        </div>
+
+        <!-- 4. HBD PART 3 (SKRIPSI) -->
+        <div x-show="step === 4" x-transition.opacity.duration.1000ms class="text-center w-full">
+            <div class="text-6xl mb-6">🎓</div>
+            <div class="glass p-8 mb-10 text-gray-700 space-y-3 shadow-md border-pink-200">
+                <p>semoga skripsinya lancarrrr</p>
+                <p>semoga niat ngerjainnya juga lancar ya 😭</p>
+                <p>semoga revisinya ga nyusahin, semoga dosennya baik</p>
+                <p class="text-xl font-bold text-pink-600 mt-4 underline decoration-wavy">semoga juni nanti udah bisa daftar sidang yeee 🫵😠</p>
+            </div>
+            <button @click="nextStep()" class="btn-primary text-white px-12 py-4 rounded-full font-bold">Next Wish</button>
+        </div>
+
+        <!-- 5. HBD PART 4 (DOA UMUM) -->
+        <div x-show="step === 5" x-transition.opacity.duration.1000ms class="text-center">
+            <div class="glass p-8 mb-10 text-gray-700 leading-relaxed space-y-4 shadow-sm text-sm">
+                <p>semoga semua hal yang lagi kamu usahain sekarang pelan-pelan dapet hasil terbaiknya.</p>
+                <p>semoga kamu selalu dikelilingi orang yang sayang sama kamu, dimudahin langkahnya, dikasih kesehatan, dan dikasih banyak alasan buat bahagia tiap harinya.</p>
+                <p>semoga kalau lagi capek, selalu ada tempat buat pulang dan cerita. semoga kalau lagi sedih, ga dipendem sendirian terus 😠</p>
+                <p class="mt-4 italic">dan semoga… hal-hal baik makin sering dateng ke hidup kamu, termasuk orang-orang yang tulus nemenin kamu kedepannya 😌🤍</p>
+            </div>
+            <button @click="nextStep()" class="btn-primary text-white px-12 py-4 rounded-full font-bold uppercase tracking-widest text-sm">Ada yang Lewat</button>
+        </div>
+
+        <!-- 6. ROBI -->
+        <div x-show="step === 6" x-transition.opacity.duration.1000ms class="text-center w-full">
+            <h2 class="text-2xl font-extrabold text-pink-600 mb-2 italic tracking-tighter">Tapi bentar... 😏</h2>
+            <p class="text-gray-500 mb-12">Si Robi mau lewat dulu</p>
+            <div class="glass p-6 mb-8 inline-block">
+                <p class="text-xs italic mb-6">pencet kepala robi buat lanjut</p>
+                <img src="images/robi.png" @click="nextStep()" class="w-40 h-40 mx-auto object-contain cursor-pointer hover:scale-110 active:scale-90 transition-transform" alt="Robi">
+            </div>
+        </div>
+
+        <!-- 7. FLASHBACK INTRO -->
+        <div x-show="step === 7" x-transition.scale.duration.1000ms class="text-center">
+            <div class="text-6xl mb-6">⏳</div>
+            <div class="glass p-8 mb-10 shadow-sm border border-pink-100">
+                <p class="text-gray-700 text-xl leading-relaxed font-handwritten">
+                    Kita flashback dulu yok memori-memori kita 1 bulan kemaren ini...
+                </p>
+            </div>
+            <button @click="nextStep()" class="btn-primary text-white px-12 py-4 rounded-full font-bold">Buka Memori ✨</button>
+        </div>
+
+        <!-- 8. MEMORY 1 (KETEMU) -->
+        <div x-show="step === 8" x-transition.opacity.duration.800ms class="w-full">
+            <div class="relative h-80 mb-12">
+                <div class="polaroid absolute top-0 left-4 rotate-[-8deg] w-40"><img src="images/slide1_1.jpg" class="w-full h-24 object-cover"></div>
+                <div class="polaroid absolute top-10 right-4 rotate-[12deg] w-40"><img src="images/slide1_2.jpg" class="w-full h-24 object-cover"></div>
+                <div class="polaroid absolute bottom-0 left-1/2 -translate-x-1/2 rotate-[-2deg] w-48"><img src="images/slide1_3.jpg" class="w-full h-32 object-cover"></div>
+            </div>
+            <div class="glass p-6 text-center italic text-gray-700 text-sm mb-8 shadow-sm">
+                "ini waktu kita pertama ketemu... yang katanya kamu susah ngomong sama orang baru tapi nyatanya... ngobrol 5 jam ga berhenti 😭"
+            </div>
+            <button @click="nextStep()" class="block mx-auto btn-primary text-white px-10 py-3 rounded-full">Next</button>
+        </div>
+
+        <!-- 9. MEMORY 2 (IJIN BAPAK) -->
+        <div x-show="step === 9" x-transition.opacity.duration.800ms class="w-full">
+            <div class="relative h-80 mb-12">
+                <div class="polaroid absolute top-0 right-4 rotate-[-10deg] w-40"><img src="images/slide2_1.jpg" class="w-full h-24 object-cover"></div>
+                <div class="polaroid absolute top-8 left-4 rotate-[15deg] w-40"><img src="images/slide2_2.jpg" class="w-full h-24 object-cover"></div>
+                <div class="polaroid absolute bottom-0 left-1/2 -translate-x-1/2 rotate-[3deg] w-48"><img src="images/slide2_3.jpg" class="w-full h-32 object-cover"></div>
+            </div>
+            <div class="glass p-6 text-center italic text-gray-700 text-sm mb-8">
+                "ini waktu main dan aku pertama kali izin ke bapamu... yang 'katanya' ke sempu ituu😭"
+            </div>
+            <button @click="nextStep()" class="block mx-auto btn-primary text-white px-10 py-3 rounded-full">Next</button>
+        </div>
+
+        <!-- 10. MEMORY 3 (GUNUNG) -->
+        <div x-show="step === 10" x-transition.opacity.duration.800ms class="w-full">
+            <div class="relative h-80 mb-12">
+                <div class="polaroid absolute top-0 left-1/2 -translate-x-1/2 rotate-[-5deg] w-44"><img src="images/slide3_1.jpg" class="w-full h-28 object-cover"></div>
+                <div class="polaroid absolute bottom-10 left-4 rotate-[10deg] w-36"><img src="images/slide3_2.jpg" class="w-full h-20 object-cover"></div>
+                <div class="polaroid absolute bottom-0 right-4 rotate-[-12deg] w-40"><img src="images/slide3_3.jpg" class="w-full h-24 object-cover"></div>
+            </div>
+            <div class="glass p-6 text-center italic text-gray-700 text-sm mb-8">
+                "ini waktu kita sarapan di gunung itu... yang kamu pake alesan mau nginep di rumah nada, padahal kamu pengen jalan-jalan aja kan? ngaku! kalo gak ada kerikil nih di sepatu! 😌"
+            </div>
+            <button @click="nextStep()" class="block mx-auto btn-primary text-white px-10 py-3 rounded-full">Next</button>
+        </div>
+
+        <!-- 11. MEMORY 4 (SAPTA WENING) -->
+        <div x-show="step === 11" x-transition.opacity.duration.800ms class="w-full">
+            <div class="relative h-80 mb-12">
+                <div class="polaroid absolute top-0 left-1/2 -translate-x-1/2 rotate-[-5deg] w-44"><img src="images/slide4_1.jpg" class="w-full h-28 object-cover"></div>
+                <div class="polaroid absolute bottom-10 left-4 rotate-[10deg] w-36"><img src="images/slide4_2.jpg" class="w-full h-20 object-cover"></div>
+                <div class="polaroid absolute bottom-0 right-4 rotate-[-12deg] w-40"><img src="images/slide4_3.jpg" class="w-full h-24 object-cover"></div>
+            </div>
+            <div class="glass p-6 text-center italic text-gray-700 text-sm mb-8">
+                "ini waktu kita ke sapta wening itu yg katanya mau warnain keychain tapi gagal karena belom kering, dan kita juga ngobrol banyak hal disitu kannn"
+            </div>
+            <button @click="nextStep()" class="block mx-auto btn-primary text-white px-10 py-3 rounded-full">Lanjut ❤️</button>
+        </div>
+
+        <!-- 12. SURAT INTI -->
+        <div x-show="step === 12" x-transition.opacity.duration.1000ms class="text-center">
+            <div class="glass p-8 text-gray-700 leading-relaxed text-sm space-y-4 shadow-sm border border-pink-100">
+                <p>"jujur ya... meskipun kita baru kenal sebentar, aku ngerasa kita udah deket banget"</p>
+                <p>"aku nyaman sama kamu, dan aku ngerasa kita saling ngerti satu sama lain"</p>
+                <p class="font-bold text-pink-500 text-base">"makasih ya... udah bikin aku percaya lagi, udah nerima cerita aku yang kemarin, dan selalu jujur ke aku"</p>
+            </div>
+            <button @click="nextStep()" class="mt-10 btn-primary text-white px-12 py-4 rounded-full font-bold">Lanjut</button>
+        </div>
+
+        <!-- 13. NAMA PANGGILAN -->
+        <div x-show="step === 13" x-transition.opacity.duration.1000ms class="text-center">
+            <p class="text-gray-500 mb-4 italic text-sm uppercase tracking-widest">tapi kayaknya masih ada yang kurang deh...</p>
+            <div class="glass p-8 shadow-sm">
+                <p class="text-xl font-bold text-pink-600 leading-snug">"kita belum punya nama panggilan... dan kamu masih manggil aku ‘kak’ 😔"</p>
+            </div>
+            <button @click="nextStep()" class="mt-12 btn-primary text-white px-12 py-4 rounded-full font-bold animate-bounce shadow-xl">???</button>
+        </div>
+
+        <!-- 14. CONFESSION (TEMBAK) -->
+        <div x-show="step === 14" x-transition.scale.duration.1000ms class="text-center w-full min-h-[400px] flex flex-col justify-center">
+            <h1 class="text-5xl font-romance text-pink-600 mb-8">jadi...</h1>
+            <p class="text-lg text-gray-700 mb-12">"gimana kalo kita resmiin aja?<br><span class="text-2xl font-bold text-pink-500 underline decoration-pink-200">kita jadian yok? 🙂</span>"</p>
+            
+            <div class="flex flex-col gap-4 items-center w-full px-4 relative">
+                <!-- Tombol YES -->
+                <button @click="nextStep()" class="w-full btn-primary text-white py-5 rounded-[2rem] font-bold shadow-xl text-lg z-10 relative overflow-hidden">
+                    AYOK! ❤️
+                </button>
+                <button @click="nextStep()" class="w-full bg-white text-pink-500 border-2 border-pink-200 py-4 rounded-[2rem] font-bold z-10 relative">
+                    Ayok juga (beda warna)
+                </button>
+                
+                <!-- Tombol GAMAU (The Runner) -->
+                <button 
+                    @mouseover="moveButton($event)" 
+                    @click="moveButton($event)"
+                    :style="`position: ${noBtnPos.pos}; left: ${noBtnPos.x}; top: ${noBtnPos.y};`"
+                    class="px-12 py-4 bg-gray-200 text-gray-500 rounded-full font-bold shadow-md transition-all duration-75 text-base whitespace-nowrap z-50 border-2 border-gray-300">
+                    gamau 🏃‍♂️
+                </button>
+            </div>
+        </div>
+
+        <!-- 15. SUCCESS PAGE (OFFICIAL) -->
+        <div x-show="step === 15" x-transition.scale.duration.800ms class="text-center w-full">
+            <div class="text-8xl mb-8 floating">💖</div>
+            <h1 class="text-3xl font-extrabold text-pink-600 mb-6 uppercase tracking-tighter">YEYYY SEKARANG KITA OFFICIAL! 🥳</h1>
+            
+            <div class="glass p-6 mb-8 text-gray-600 leading-relaxed text-sm shadow-sm">
+                <p class="mb-6 font-bold text-pink-500 text-center">yok tentuin nama panggilan kita 😏 tapi jangan ‘bubub’ ya wkwk</p>
+                
+                <div class="bg-pink-100/50 p-6 rounded-3xl border-2 border-dashed border-pink-300">
+                    <p class="text-xs font-bold text-pink-500 uppercase mb-4 tracking-widest text-center">✨ Our Rules ✨</p>
+                    <ul class="text-left space-y-3 text-[11px] font-bold text-pink-600">
+                        <li class="flex items-start"><span class="mr-2">🌸</span> <span>No Silent Treatment / No Ghosting</span></li>
+                        <li class="flex items-start"><span class="mr-2">🌸</span> <span>Kalo ada sesuatu yang mengganjal tanyain aja gapapaaa</span></li>
+                        <li class="flex items-start"><span class="mr-2">🌸</span> <span>Kalo di antara kita berdua ada salah juga kasi tau aja yaa</span></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="font-handwritten text-2xl text-pink-400 mt-4">Happy Birthday, Lia Sayang. 🤍</p>
+        </div>
+
+    </main>
+
+    <!-- Kontainer Confetti -->
+    <div id="confetti-container" class="fixed inset-0 pointer-events-none z-50"></div>
+
+    <script>
+        function app() {
+            return {
+                step: 1,
+                audioPlaying: false,
+                noBtnPos: { pos: 'relative', x: '0', y: '0' },
+                
+                openEnvelope() {
+                    this.step = 2;
+                    this.toggleAudio(true);
+                },
+                nextStep() {
+                    this.step++;
+                    if(this.step === 15) this.triggerConfetti();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+                toggleAudio(forcePlay = false) {
+                    const audio = document.getElementById('bgMusic');
+                    if (forcePlay || audio.paused) {
+                        audio.play().catch(e => console.log("Audio play blocked"));
+                        this.audioPlaying = true;
+                    } else {
+                        audio.pause();
+                        this.audioPlaying = false;
+                    }
+                },
+                moveButton(e) {
+                    // Soundboard effect: reset audio ke awal setiap dipicu
+                    const sound = document.getElementById('errorSound');
+                    sound.currentTime = 0;
+                    sound.play().catch(e => {});
+
+                    // Hitung posisi acak di dalam viewport
+                    const padding = 80;
+                    const x = Math.random() * (window.innerWidth - padding * 2) + padding/2;
+                    const y = Math.random() * (window.innerHeight - padding * 2) + padding/2;
+                    
+                    this.noBtnPos = { 
+                        pos: 'fixed', 
+                        x: x + 'px', 
+                        y: y + 'px' 
+                    };
+                },
+                triggerConfetti() {
+                    const colors = ['🌸','✨','❤️','🎉','💖','🌷'];
+                    for(let i=0; i<100; i++) {
+                        const confetti = document.createElement('div');
+                        confetti.innerText = colors[Math.floor(Math.random()*colors.length)];
+                        confetti.style.position = 'fixed';
+                        confetti.style.left = Math.random() * 100 + 'vw';
+                        confetti.style.top = '-20px';
+                        confetti.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                        confetti.style.transition = `all ${Math.random() * 3 + 2}s cubic-bezier(0,0,0.5,1)`;
+                        confetti.style.zIndex = '100';
+                        document.getElementById('confetti-container').appendChild(confetti);
+                        
+                        setTimeout(() => {
+                            confetti.style.top = '100vh';
+                            confetti.style.transform = `rotate(${Math.random() * 720}deg) translateX(${Math.random() * 100 - 50}px)`;
+                            confetti.style.opacity = '0';
+                        }, 10);
+                        
+                        setTimeout(() => confetti.remove(), 5000);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
